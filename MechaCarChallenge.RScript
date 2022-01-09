@@ -1,0 +1,37 @@
+library(dplyr)
+library(jsonlite)
+library(tidyverse)
+
+
+
+#Deliverable 1:
+# Read CSV to DataFrame
+mechacar_mpg_df <- read.csv('MechaCar_mpg.csv', check.names = F, stringsAsFactors = F)
+head(mechacar_mpg_df)
+
+# RScript is written for a linear regression model to be performed on all six variables - Using lm() function
+lm(mpg~vehicle_length+vehicle_weight+spoiler_angle+ground_clearance+AWD, data = mechacar_mpg_df)
+
+# RScript is written to create the statistical summary of the linear regression model with the intended p-values - Using the summary() funciton
+summary(lm(mpg~vehicle_length+vehicle_weight+spoiler_angle+ground_clearance+AWD, data = mechacar_mpg_df))
+
+#Deliverable 2: 
+# The suspension coil's PSI continuous variable across all manufacturing lots
+suspension_coil_df <- read.csv('Suspension_Coil.csv', check.names = F, stringsAsFactors = F)
+head(suspension_coil_df)
+
+# The following PSI metrics for each lot: mean, median, variance, and standard deviation. 
+# Create total_summary df
+total_summary <- suspension_coil_df %>% summarize(Mean = mean(PSI), Median = median(PSI), Variance = var(PSI), SD = sd(PSI))
+
+# Create lot_summary 
+lot_summary <- suspension_coil_df %>% group_by(Manufacturing_Lot) %>% summarize(Mean = mean(PSI), Median = median(PSI), Variance = var(PSI), SD = sd(PSI), .groups = 'keep')
+
+#Deliverable 3: 
+# Create T-Test on Suspension Coils
+t.test(suspension_coil_df$PSI, mu=1500)
+
+# Create T-Test for each manufacturing lot 
+t.test(subset(suspension_coil_df,Manufacturing_Lot=="Lot1")$PSI, mu = 1500)
+t.test(subset(suspension_coil_df,Manufacturing_Lot=="Lot2")$PSI, mu = 1500)
+t.test(subset(suspension_coil_df,Manufacturing_Lot=="Lot3")$PSI, mu = 1500)
